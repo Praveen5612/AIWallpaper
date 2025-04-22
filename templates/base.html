@@ -4,23 +4,29 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>{% block title %}WallpaperAI - AI-Generated Wallpapers{% endblock %}</title>
-    <meta name="description" content="{% block description %}Discover thousands of AI-generated wallpapers. High-quality, unique designs for any device.{% endblock %}">
+    <meta name="description" content="Discover thousands of AI-generated wallpapers. High-quality, unique designs for any device.">
     
     <!-- Favicon -->
+    <link rel="icon" type="image/svg+xml" href="{{ url_for('static', filename='images/favicon.svg') }}">
     <link rel="icon" type="image/png" href="{{ url_for('static', filename='images/favicon.png') }}">
     
-    <!-- Google Fonts -->
+    <!-- Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;500;600;700&family=Roboto:wght@300;400;500;700&display=swap" rel="stylesheet">
     
-    <!-- Remix Icons -->
+    <!-- Icons -->
     <link href="https://cdn.jsdelivr.net/npm/remixicon@3.5.0/fonts/remixicon.css" rel="stylesheet">
     
-    <!-- Main CSS -->
+    <!-- Styles -->
     <link rel="stylesheet" href="{{ url_for('static', filename='css/styles.css') }}">
     
-    {% block extra_head %}{% endblock %}
+    <!-- AdSense -->
+    {% if adsense_client_id %}
+    <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client={{ adsense_client_id }}" crossorigin="anonymous"></script>
+    {% endif %}
+    
+    {% block head_extra %}{% endblock %}
 </head>
 <body>
     <div class="site-wrapper">
@@ -28,18 +34,22 @@
         <header class="site-header">
             <div class="container">
                 <div class="header-wrapper">
-                    <a href="/" class="logo">
-                        <div class="logo-icon">
-                            <i class="ri-image-2-fill"></i>
-                        </div>
-                        <h1 class="logo-text">WallpaperAI</h1>
-                    </a>
+                    <div class="logo">
+                        <a href="/" class="logo-link">
+                            <div class="logo-icon">
+                                <i class="ri-image-line"></i>
+                            </div>
+                            <div class="logo-text">WallpaperAI</div>
+                        </a>
+                    </div>
                     
                     <div class="search-bar">
-                        <form action="/search" method="GET" id="search-form">
+                        <form action="/search" method="get" class="search-form">
                             <div class="search-input-wrapper">
-                                <i class="ri-search-line search-icon"></i>
-                                <input type="text" name="q" id="search-input" placeholder="Search wallpapers..." required>
+                                <div class="search-icon">
+                                    <i class="ri-search-line"></i>
+                                </div>
+                                <input type="text" name="q" placeholder="Search wallpapers..." required>
                                 <button type="submit" class="search-button">Search</button>
                             </div>
                         </form>
@@ -48,13 +58,12 @@
                     <nav class="main-nav">
                         <ul class="main-menu">
                             <li><a href="/" class="nav-link">Home</a></li>
-                            <li><a href="/category/all" class="nav-link">Explore</a></li>
-                            <li><a href="#categories" class="nav-link">Categories</a></li>
-                            <li><a href="#trending" class="nav-link">Trending</a></li>
+                            <li><a href="/category/abstract" class="nav-link">Categories</a></li>
+                            <li><a href="/search?q=4k" class="nav-link">4K Wallpapers</a></li>
                         </ul>
                     </nav>
                     
-                    <button type="button" class="mobile-menu-toggle" id="mobile-menu-toggle">
+                    <button id="mobile-menu-toggle" class="mobile-menu-toggle">
                         <i class="ri-menu-line"></i>
                     </button>
                 </div>
@@ -62,35 +71,36 @@
         </header>
         
         <!-- Mobile Menu -->
-        <div class="mobile-menu" id="mobile-menu">
+        <div id="mobile-menu" class="mobile-menu">
             <div class="mobile-menu-header">
-                <a href="/" class="logo">
+                <div class="logo">
                     <div class="logo-icon">
-                        <i class="ri-image-2-fill"></i>
+                        <i class="ri-image-line"></i>
                     </div>
-                    <h1 class="logo-text">WallpaperAI</h1>
-                </a>
-                <button type="button" class="mobile-menu-close" id="mobile-menu-close">
+                    <div class="logo-text">WallpaperAI</div>
+                </div>
+                <button id="mobile-menu-close" class="mobile-menu-close">
                     <i class="ri-close-line"></i>
                 </button>
             </div>
+            
             <div class="mobile-search">
-                <form action="/search" method="GET">
+                <form action="/search" method="get" class="search-form">
                     <div class="search-input-wrapper">
-                        <i class="ri-search-line search-icon"></i>
-                        <input type="text" name="q" placeholder="Search wallpapers..." required>
-                        <button type="submit" class="search-button">
+                        <div class="search-icon">
                             <i class="ri-search-line"></i>
-                        </button>
+                        </div>
+                        <input type="text" name="q" placeholder="Search wallpapers..." required>
+                        <button type="submit" class="search-button">Search</button>
                     </div>
                 </form>
             </div>
+            
             <nav class="mobile-nav">
                 <ul class="mobile-menu-list">
                     <li><a href="/" class="mobile-nav-link">Home</a></li>
-                    <li><a href="/category/all" class="mobile-nav-link">Explore</a></li>
-                    <li><a href="#categories" class="mobile-nav-link">Categories</a></li>
-                    <li><a href="#trending" class="mobile-nav-link">Trending</a></li>
+                    <li><a href="/category/abstract" class="mobile-nav-link">Categories</a></li>
+                    <li><a href="/search?q=4k" class="mobile-nav-link">4K Wallpapers</a></li>
                 </ul>
             </nav>
         </div>
@@ -104,94 +114,71 @@
         <footer class="site-footer">
             <div class="container">
                 <div class="footer-grid">
-                    <div class="footer-col footer-about">
-                        <a href="/" class="logo footer-logo">
-                            <div class="logo-icon">
-                                <i class="ri-image-2-fill"></i>
+                    <div class="footer-about">
+                        <div class="footer-logo">
+                            <div class="logo">
+                                <div class="logo-icon">
+                                    <i class="ri-image-line"></i>
+                                </div>
+                                <div class="logo-text">WallpaperAI</div>
                             </div>
-                            <h2 class="logo-text">WallpaperAI</h2>
-                        </a>
+                        </div>
                         <p class="footer-description">
-                            Discover thousands of AI-generated wallpapers for your devices. High-quality, unique, and completely free.
+                            WallpaperAI is your source for stunning, AI-generated wallpapers for all your devices.
                         </p>
                         <div class="social-links">
+                            <a href="#" class="social-link"><i class="ri-facebook-fill"></i></a>
                             <a href="#" class="social-link"><i class="ri-twitter-x-fill"></i></a>
                             <a href="#" class="social-link"><i class="ri-instagram-fill"></i></a>
-                            <a href="#" class="social-link"><i class="ri-facebook-fill"></i></a>
                             <a href="#" class="social-link"><i class="ri-pinterest-fill"></i></a>
                         </div>
                     </div>
                     
-                    <div class="footer-col">
+                    <div class="footer-section">
                         <h3 class="footer-heading">Categories</h3>
                         <ul class="footer-menu" id="footer-categories">
                             <li><a href="/category/abstract" class="footer-link">Abstract</a></li>
                             <li><a href="/category/nature" class="footer-link">Nature</a></li>
                             <li><a href="/category/space" class="footer-link">Space</a></li>
-                            <li><a href="/category/cyberpunk" class="footer-link">Cyberpunk</a></li>
-                            <li><a href="/category/minimal" class="footer-link">Minimal</a></li>
-                            <li><a href="/category/sci-fi" class="footer-link">Sci-Fi</a></li>
+                            <li><a href="/category/futuristic" class="footer-link">Futuristic</a></li>
                         </ul>
                     </div>
                     
-                    <div class="footer-col">
+                    <div class="footer-section">
                         <h3 class="footer-heading">Quick Links</h3>
                         <ul class="footer-menu">
-                            <li><a href="/" class="footer-link">Home</a></li>
-                            <li><a href="/category/all" class="footer-link">Browse All</a></li>
-                            <li><a href="#featured" class="footer-link">Featured</a></li>
-                            <li><a href="#trending" class="footer-link">Popular</a></li>
-                            <li><a href="#latest" class="footer-link">New Releases</a></li>
+                            <li><a href="/search?q=4k" class="footer-link">4K Wallpapers</a></li>
+                            <li><a href="/search?q=mobile" class="footer-link">Mobile Wallpapers</a></li>
+                            <li><a href="/search?q=desktop" class="footer-link">Desktop Wallpapers</a></li>
+                            <li><a href="/search?q=new" class="footer-link">New Wallpapers</a></li>
                         </ul>
                     </div>
                     
-                    <div class="footer-col">
-                        <h3 class="footer-heading">Support</h3>
+                    <div class="footer-section">
+                        <h3 class="footer-heading">Company</h3>
                         <ul class="footer-menu">
-                            <li><a href="/about" class="footer-link">About Us</a></li>
-                            <li><a href="/privacy" class="footer-link">Privacy Policy</a></li>
-                            <li><a href="/terms" class="footer-link">Terms of Service</a></li>
-                            <li><a href="/contact" class="footer-link">Contact Us</a></li>
-                            <li><a href="/faq" class="footer-link">FAQ</a></li>
+                            <li><a href="#" class="footer-link">About</a></li>
+                            <li><a href="#" class="footer-link">Privacy Policy</a></li>
+                            <li><a href="#" class="footer-link">Terms of Service</a></li>
+                            <li><a href="#" class="footer-link">Contact</a></li>
                         </ul>
                     </div>
                 </div>
                 
                 <div class="footer-bottom">
-                    <p class="copyright">
-                        &copy; <span id="current-year"></span> WallpaperAI. All rights reserved.
-                    </p>
-                    <p class="powered-by">
-                        Powered by AI-Generated Content
-                    </p>
+                    <div class="copyright">
+                        &copy; {{ year }} WallpaperAI. All rights reserved.
+                    </div>
+                    <div class="powered-by">
+                        Powered by RunwayAI
+                    </div>
                 </div>
             </div>
         </footer>
-        
-        <!-- Wallpaper Detail Modal -->
-        <div id="wallpaper-modal" class="modal">
-            <div class="modal-overlay"></div>
-            <div class="modal-container">
-                <div class="modal-header">
-                    <button type="button" class="modal-close" id="modal-close">
-                        <i class="ri-close-line"></i>
-                    </button>
-                </div>
-                <div class="modal-content" id="modal-content">
-                    <!-- Modal content will be inserted here by JavaScript -->
-                </div>
-            </div>
-        </div>
     </div>
     
-    <!-- Main JavaScript -->
+    <!-- JavaScript -->
     <script src="{{ url_for('static', filename='js/main.js') }}"></script>
-    
-    <!-- Set current year in footer copyright -->
-    <script>
-        document.getElementById('current-year').textContent = new Date().getFullYear();
-    </script>
-    
     {% block extra_scripts %}{% endblock %}
 </body>
 </html>

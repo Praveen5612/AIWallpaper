@@ -129,6 +129,11 @@ def serialize_tag(tag):
 def create_tables():
     db.create_all()
 
+# Template context processor
+@app.context_processor
+def inject_year():
+    return {'year': datetime.datetime.now().year, 'adsense_client_id': os.getenv('ADSENSE_CLIENT_ID')}
+
 # Web Routes
 @app.route('/')
 def index():

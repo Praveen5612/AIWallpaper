@@ -3,27 +3,25 @@
 {% block title %}WallpaperAI - AI-Generated Wallpapers{% endblock %}
 
 {% block content %}
-<!-- Hero Section -->
 <section class="hero-section">
     <div class="container">
         <div class="hero-content">
-            <h1 class="hero-title">
-                Discover <span class="accent-text">AI-Generated</span> Wallpapers
-            </h1>
+            <h1 class="hero-title">Discover <span class="accent-text">AI-Generated</span> Wallpapers</h1>
             <p class="hero-description">
-                Thousands of high-quality, unique wallpapers for any device. 
-                Powered by advanced AI technology.
+                Thousands of unique, high-quality wallpapers created by artificial intelligence.
+                Find the perfect background for your device.
             </p>
             <div class="hero-actions">
-                <a href="/category/all" class="btn btn-primary">
-                    <i class="ri-image-line"></i> Browse Wallpapers
+                <a href="/category/abstract" class="btn btn-primary">
+                    Explore Categories <i class="ri-arrow-right-line"></i>
                 </a>
-                <a href="#categories" class="btn btn-secondary">
-                    <i class="ri-apps-line"></i> Explore Categories
+                <a href="/search?q=4k" class="btn btn-secondary">
+                    Browse 4K Wallpapers
                 </a>
             </div>
         </div>
     </div>
+    
     <div class="hero-gradient"></div>
     <div class="hero-shapes">
         <div class="shape shape-1"></div>
@@ -32,14 +30,11 @@
     </div>
 </section>
 
-<!-- Categories Section -->
-<section class="categories-section" id="categories">
+<section class="categories-section">
     <div class="container">
         <div class="section-header">
-            <h2 class="section-title">
-                Discover <span class="accent-text">Categories</span>
-            </h2>
-            <a href="/category/all" class="section-link">
+            <h2 class="section-title">Browse Categories</h2>
+            <a href="/category/abstract" class="section-link">
                 View All <i class="ri-arrow-right-line"></i>
             </a>
         </div>
@@ -56,18 +51,26 @@
     </div>
 </section>
 
-<!-- Featured Wallpapers Section -->
-<section class="featured-section" id="featured">
+<section class="ad-section">
+    <div class="container">
+        <div class="ad-banner">
+            <div class="ad-container">
+                <span class="ad-label">Advertisement</span>
+                <!-- Ad content -->
+            </div>
+        </div>
+    </div>
+</section>
+
+<section class="featured-section">
     <div class="container">
         <div class="section-header">
-            <h2 class="section-title">
-                Featured <span class="accent-text">Wallpapers</span>
-            </h2>
+            <h2 class="section-title">Featured Wallpapers</h2>
             <div class="slider-controls">
-                <button class="slider-control prev-slide" id="featured-prev">
+                <button id="featured-prev" class="slider-control">
                     <i class="ri-arrow-left-s-line"></i>
                 </button>
-                <button class="slider-control next-slide" id="featured-next">
+                <button id="featured-next" class="slider-control">
                     <i class="ri-arrow-right-s-line"></i>
                 </button>
             </div>
@@ -75,22 +78,35 @@
         
         <div class="featured-grid" id="featured-wallpapers">
             <!-- Featured wallpapers will be loaded dynamically -->
-            <div class="wallpaper-card-skeleton"></div>
-            <div class="wallpaper-card-skeleton"></div>
-            <div class="wallpaper-card-skeleton"></div>
-            <div class="wallpaper-card-skeleton"></div>
+            <div class="wallpaper-card-skeleton">
+                <div class="wallpaper-image-skeleton"></div>
+                <div class="wallpaper-title-skeleton"></div>
+                <div class="wallpaper-meta-skeleton"></div>
+            </div>
+            <div class="wallpaper-card-skeleton">
+                <div class="wallpaper-image-skeleton"></div>
+                <div class="wallpaper-title-skeleton"></div>
+                <div class="wallpaper-meta-skeleton"></div>
+            </div>
+            <div class="wallpaper-card-skeleton">
+                <div class="wallpaper-image-skeleton"></div>
+                <div class="wallpaper-title-skeleton"></div>
+                <div class="wallpaper-meta-skeleton"></div>
+            </div>
+            <div class="wallpaper-card-skeleton">
+                <div class="wallpaper-image-skeleton"></div>
+                <div class="wallpaper-title-skeleton"></div>
+                <div class="wallpaper-meta-skeleton"></div>
+            </div>
         </div>
     </div>
 </section>
 
-<!-- Trending Wallpapers Section -->
-<section class="trending-section" id="trending">
+<section class="trending-section">
     <div class="container">
         <div class="section-header">
-            <h2 class="section-title">
-                Trending <span class="accent-text">Today</span>
-            </h2>
-            <a href="/category/all" class="section-link">
+            <h2 class="section-title">Trending Wallpapers</h2>
+            <a href="/search?q=popular" class="section-link">
                 View All <i class="ri-arrow-right-line"></i>
             </a>
         </div>
@@ -104,33 +120,27 @@
             <div class="masonry-item-skeleton"></div>
             <div class="masonry-item-skeleton"></div>
         </div>
-        
-        <div class="load-more-container">
-            <button class="btn btn-secondary" id="load-more-btn">
-                Load More <i class="ri-refresh-line"></i>
-            </button>
-        </div>
     </div>
 </section>
 
-<!-- Newsletter Section -->
 <section class="newsletter-section">
     <div class="container">
         <div class="newsletter-content">
-            <h2 class="section-title">
-                Stay Updated with <span class="accent-text">New Releases</span>
-            </h2>
+            <h2 class="section-title">Subscribe to Our Newsletter</h2>
             <p class="newsletter-description">
-                Subscribe to our newsletter to get notified about new wallpapers, features, and special offers.
+                Be the first to know about new wallpapers, features, and special offers.
+                We'll never spam you or share your email with third parties.
             </p>
             
-            <form class="newsletter-form" id="newsletter-form">
+            <div class="newsletter-form">
                 <div class="form-group">
-                    <input type="email" id="newsletter-email" placeholder="Enter your email" required>
-                    <button type="submit" class="btn btn-primary" id="subscribe-btn">Subscribe</button>
+                    <input type="email" id="newsletter-email" placeholder="Enter your email address" required>
+                    <button type="button" id="subscribe-btn" class="btn btn-primary" onclick="subscribeToNewsletter()">
+                        Subscribe
+                    </button>
                 </div>
-                <div class="form-message" id="newsletter-message"></div>
-            </form>
+                <div id="newsletter-message" class="form-message"></div>
+            </div>
         </div>
         
         <div class="ad-banner">
@@ -140,13 +150,28 @@
             </div>
         </div>
     </div>
+    
     <div class="newsletter-bg-shape"></div>
 </section>
+
+<!-- Wallpaper Modal -->
+<div id="wallpaper-modal" class="modal">
+    <div class="modal-overlay"></div>
+    <div class="modal-container">
+        <div class="modal-header">
+            <button id="modal-close" class="modal-close">
+                <i class="ri-close-line"></i>
+            </button>
+        </div>
+        <div class="modal-content" id="modal-content">
+            <!-- Modal content will be loaded dynamically -->
+        </div>
+    </div>
+</div>
 {% endblock %}
 
 {% block extra_scripts %}
 <script>
-    // Home page specific scripts
     document.addEventListener('DOMContentLoaded', function() {
         // Load categories
         fetchCategories();
@@ -156,13 +181,6 @@
         
         // Load trending wallpapers
         fetchTrendingWallpapers();
-        
-        // Newsletter form submission
-        const newsletterForm = document.getElementById('newsletter-form');
-        newsletterForm.addEventListener('submit', function(e) {
-            e.preventDefault();
-            subscribeToNewsletter();
-        });
     });
 </script>
 {% endblock %}
