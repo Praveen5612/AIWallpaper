@@ -5,10 +5,8 @@
 {% block content %}
 <section class="category-header">
     <div class="container">
-        <div class="category-info" id="category-info">
-            <h1 class="category-title" id="category-title">Loading...</h1>
-            <p class="category-description" id="category-description">Loading category information...</p>
-        </div>
+        <h1 class="category-title" id="category-title">Loading Category...</h1>
+        <p class="category-description" id="category-description">Loading wallpapers...</p>
     </div>
 </section>
 
@@ -35,16 +33,12 @@
             <div class="masonry-item-skeleton"></div>
             <div class="masonry-item-skeleton"></div>
             <div class="masonry-item-skeleton"></div>
-            <div class="masonry-item-skeleton"></div>
-            <div class="masonry-item-skeleton"></div>
-            <div class="masonry-item-skeleton"></div>
-            <div class="masonry-item-skeleton"></div>
         </div>
         
         <div id="no-wallpapers" class="no-results" style="display: none;">
             <i class="ri-image-line no-results-icon"></i>
             <h2 class="no-results-title">No wallpapers found</h2>
-            <p class="no-results-message">We couldn't find any wallpapers in this category.</p>
+            <p class="no-results-message">There are no wallpapers in this category yet. Please check back later.</p>
         </div>
         
         <div class="load-more-container">
@@ -65,33 +59,41 @@
     // Variables for pagination
     let page = 1;
     const itemsPerPage = 12;
-    let allWallpapers = [];
     let hasMore = true;
     
     document.addEventListener('DOMContentLoaded', function() {
-        // Load category info
-        if (slug === 'all') {
-            document.getElementById('category-title').textContent = 'All Wallpapers';
-            document.getElementById('category-description').textContent = 'Browse our entire collection of AI-generated wallpapers.';
-            document.title = 'All Wallpapers | WallpaperAI';
-            fetchAllWallpapers();
-        } else {
-            fetchCategory(slug);
-        }
+        // Fetch category
+        fetchCategory(slug);
         
         // Load more button
-        document.getElementById('load-more-btn').addEventListener('click', loadMoreWallpapers);
+        document.getElementById('load-more-btn').addEventListener('click', function() {
+            page++;
+            displayWallpapers();
+            
+            // Hide button if no more wallpapers
+            if (!hasMore) {
+                this.style.display = 'none';
+            }
+        });
     });
     
-    // Function to handle "Load More" button
-    function loadMoreWallpapers() {
-        page++;
-        displayWallpapers();
-        
-        // Hide button if no more wallpapers
-        if (!hasMore) {
-            document.getElementById('load-more-btn').style.display = 'none';
-        }
-    }
+    // Modal for wallpaper details
+    const modal = document.createElement('div');
+    modal.id = 'wallpaper-modal';
+    modal.className = 'modal';
+    modal.innerHTML = `
+        <div class="modal-overlay"></div>
+        <div class="modal-container">
+            <div class="modal-header">
+                <button id="modal-close" class="modal-close">
+                    <i class="ri-close-line"></i>
+                </button>
+            </div>
+            <div class="modal-content" id="modal-content">
+                <!-- Modal content will be loaded dynamically -->
+            </div>
+        </div>
+    `;
+    document.body.appendChild(modal);
 </script>
 {% endblock %}

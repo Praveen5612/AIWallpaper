@@ -1,0 +1,96 @@
+{% extends "base.html" %}
+
+{% block title %}Search Results | WallpaperAI{% endblock %}
+
+{% block content %}
+<section class="search-header">
+    <div class="container">
+        <div class="search-info" id="search-info">
+            <h1 class="search-title">Search Results: "<span id="search-query">Loading...</span>"</h1>
+            <p class="search-count" id="search-count">Searching...</p>
+        </div>
+    </div>
+</section>
+
+<section class="ad-section">
+    <div class="container">
+        <div class="ad-banner">
+            <div class="ad-container">
+                <span class="ad-label">Advertisement</span>
+                <!-- Ad content -->
+            </div>
+        </div>
+    </div>
+</section>
+
+<section class="wallpapers-section">
+    <div class="container">
+        <div class="masonry-grid" id="search-results">
+            <!-- Search results will be loaded dynamically -->
+            <div class="masonry-item-skeleton"></div>
+            <div class="masonry-item-skeleton"></div>
+            <div class="masonry-item-skeleton"></div>
+            <div class="masonry-item-skeleton"></div>
+            <div class="masonry-item-skeleton"></div>
+            <div class="masonry-item-skeleton"></div>
+            <div class="masonry-item-skeleton"></div>
+            <div class="masonry-item-skeleton"></div>
+        </div>
+        
+        <div id="no-results" class="no-results" style="display: none;">
+            <i class="ri-search-line no-results-icon"></i>
+            <h2 class="no-results-title">No results found</h2>
+            <p class="no-results-message">Try a different search term or browse our categories.</p>
+        </div>
+        
+        <div class="load-more-container">
+            <button class="btn btn-secondary" id="load-more-btn">
+                Load More <i class="ri-refresh-line"></i>
+            </button>
+        </div>
+    </div>
+</section>
+{% endblock %}
+
+{% block extra_scripts %}
+<script>
+    // Get search query from URL
+    const urlParams = new URLSearchParams(window.location.search);
+    const query = urlParams.get('q') || '';
+    
+    // Variables for pagination
+    let page = 1;
+    const itemsPerPage = 12;
+    let allWallpapers = [];
+    let hasMore = true;
+    
+    document.addEventListener('DOMContentLoaded', function() {
+        // Display search query
+        document.getElementById('search-query').textContent = query;
+        document.title = `Search: ${query} | WallpaperAI`;
+        
+        // Search wallpapers
+        if (query) {
+            searchWallpapers(query);
+        } else {
+            document.getElementById('search-count').textContent = 'No search query provided';
+            document.getElementById('no-results').style.display = 'block';
+            document.getElementById('load-more-btn').style.display = 'none';
+        }
+        
+        // Load more button
+        document.getElementById('load-more-btn').addEventListener('click', loadMoreWallpapers);
+    });
+    
+    // Function to handle "Load More" button
+    function loadMoreWallpapers() {
+        page++;
+        displayWallpapers();
+        
+        // Hide button if no more wallpapers
+        if (!hasMore) {
+            document.getElementById('load-more-btn').style.display = 'none';
+        }
+    }
+</script>
+{% endblock %}
