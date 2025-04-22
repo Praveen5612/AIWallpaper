@@ -1,0 +1,97 @@
+{% extends "base.html" %}
+
+{% block title %}Category | WallpaperAI{% endblock %}
+
+{% block content %}
+<section class="category-header">
+    <div class="container">
+        <div class="category-info" id="category-info">
+            <h1 class="category-title" id="category-title">Loading...</h1>
+            <p class="category-description" id="category-description">Loading category information...</p>
+        </div>
+    </div>
+</section>
+
+<section class="ad-section">
+    <div class="container">
+        <div class="ad-banner">
+            <div class="ad-container">
+                <span class="ad-label">Advertisement</span>
+                <!-- Ad content -->
+            </div>
+        </div>
+    </div>
+</section>
+
+<section class="wallpapers-section">
+    <div class="container">
+        <div class="masonry-grid" id="category-wallpapers">
+            <!-- Wallpapers will be loaded dynamically -->
+            <div class="masonry-item-skeleton"></div>
+            <div class="masonry-item-skeleton"></div>
+            <div class="masonry-item-skeleton"></div>
+            <div class="masonry-item-skeleton"></div>
+            <div class="masonry-item-skeleton"></div>
+            <div class="masonry-item-skeleton"></div>
+            <div class="masonry-item-skeleton"></div>
+            <div class="masonry-item-skeleton"></div>
+            <div class="masonry-item-skeleton"></div>
+            <div class="masonry-item-skeleton"></div>
+            <div class="masonry-item-skeleton"></div>
+            <div class="masonry-item-skeleton"></div>
+        </div>
+        
+        <div id="no-wallpapers" class="no-results" style="display: none;">
+            <i class="ri-image-line no-results-icon"></i>
+            <h2 class="no-results-title">No wallpapers found</h2>
+            <p class="no-results-message">We couldn't find any wallpapers in this category.</p>
+        </div>
+        
+        <div class="load-more-container">
+            <button class="btn btn-secondary" id="load-more-btn">
+                Load More <i class="ri-refresh-line"></i>
+            </button>
+        </div>
+    </div>
+</section>
+{% endblock %}
+
+{% block extra_scripts %}
+<script>
+    // Get category slug from URL
+    const path = window.location.pathname;
+    const slug = path.split('/').pop();
+    
+    // Variables for pagination
+    let page = 1;
+    const itemsPerPage = 12;
+    let allWallpapers = [];
+    let hasMore = true;
+    
+    document.addEventListener('DOMContentLoaded', function() {
+        // Load category info
+        if (slug === 'all') {
+            document.getElementById('category-title').textContent = 'All Wallpapers';
+            document.getElementById('category-description').textContent = 'Browse our entire collection of AI-generated wallpapers.';
+            document.title = 'All Wallpapers | WallpaperAI';
+            fetchAllWallpapers();
+        } else {
+            fetchCategory(slug);
+        }
+        
+        // Load more button
+        document.getElementById('load-more-btn').addEventListener('click', loadMoreWallpapers);
+    });
+    
+    // Function to handle "Load More" button
+    function loadMoreWallpapers() {
+        page++;
+        displayWallpapers();
+        
+        // Hide button if no more wallpapers
+        if (!hasMore) {
+            document.getElementById('load-more-btn').style.display = 'none';
+        }
+    }
+</script>
+{% endblock %}

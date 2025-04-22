@@ -1,0 +1,54 @@
+{% extends "base.html" %}
+
+{% block title %}Wallpaper Detail | WallpaperAI{% endblock %}
+
+{% block content %}
+<section class="wallpaper-detail-section">
+    <div class="container">
+        <div class="wallpaper-grid" id="wallpaper-detail">
+            <!-- Wallpaper details will be loaded dynamically -->
+            <div class="wallpaper-image-skeleton"></div>
+            <div class="wallpaper-info-skeleton"></div>
+        </div>
+    </div>
+</section>
+
+<section class="ad-section">
+    <div class="container">
+        <div class="ad-banner">
+            <div class="ad-container">
+                <span class="ad-label">Advertisement</span>
+                <!-- Ad content -->
+            </div>
+        </div>
+    </div>
+</section>
+
+<section class="similar-wallpapers-section">
+    <div class="container">
+        <h2 class="section-title">You May Also Like</h2>
+        
+        <div class="similar-grid" id="similar-wallpapers">
+            <!-- Similar wallpapers will be loaded dynamically -->
+            <div class="similar-wallpaper-skeleton"></div>
+            <div class="similar-wallpaper-skeleton"></div>
+            <div class="similar-wallpaper-skeleton"></div>
+            <div class="similar-wallpaper-skeleton"></div>
+            <div class="similar-wallpaper-skeleton"></div>
+        </div>
+    </div>
+</section>
+{% endblock %}
+
+{% block extra_scripts %}
+<script>
+    // Get wallpaper slug from URL
+    const path = window.location.pathname;
+    const slug = path.split('/').pop();
+    
+    document.addEventListener('DOMContentLoaded', function() {
+        // Load wallpaper details
+        fetchWallpaperDetails(slug);
+    });
+</script>
+{% endblock %}

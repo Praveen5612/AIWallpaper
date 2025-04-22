@@ -1,0 +1,168 @@
+{% extends "base.html" %}
+
+{% block title %}WallpaperAI - AI-Generated Wallpapers{% endblock %}
+
+{% block content %}
+<!-- Hero Section -->
+<section class="hero-section">
+    <div class="container">
+        <div class="hero-content">
+            <h1 class="hero-title">
+                Discover <span class="accent-text">AI-Generated</span> Wallpapers
+            </h1>
+            <p class="hero-description">
+                Thousands of high-quality, unique wallpapers for any device. 
+                Powered by advanced AI technology.
+            </p>
+            <div class="hero-actions">
+                <a href="/category/all" class="btn btn-primary">
+                    <i class="ri-image-line"></i> Browse Wallpapers
+                </a>
+                <a href="#categories" class="btn btn-secondary">
+                    <i class="ri-apps-line"></i> Explore Categories
+                </a>
+            </div>
+        </div>
+    </div>
+    <div class="hero-gradient"></div>
+    <div class="hero-shapes">
+        <div class="shape shape-1"></div>
+        <div class="shape shape-2"></div>
+        <div class="shape shape-3"></div>
+    </div>
+</section>
+
+<!-- Categories Section -->
+<section class="categories-section" id="categories">
+    <div class="container">
+        <div class="section-header">
+            <h2 class="section-title">
+                Discover <span class="accent-text">Categories</span>
+            </h2>
+            <a href="/category/all" class="section-link">
+                View All <i class="ri-arrow-right-line"></i>
+            </a>
+        </div>
+        
+        <div class="categories-grid" id="categories-grid">
+            <!-- Categories will be loaded dynamically -->
+            <div class="category-skeleton"></div>
+            <div class="category-skeleton"></div>
+            <div class="category-skeleton"></div>
+            <div class="category-skeleton"></div>
+            <div class="category-skeleton"></div>
+            <div class="category-skeleton"></div>
+        </div>
+    </div>
+</section>
+
+<!-- Featured Wallpapers Section -->
+<section class="featured-section" id="featured">
+    <div class="container">
+        <div class="section-header">
+            <h2 class="section-title">
+                Featured <span class="accent-text">Wallpapers</span>
+            </h2>
+            <div class="slider-controls">
+                <button class="slider-control prev-slide" id="featured-prev">
+                    <i class="ri-arrow-left-s-line"></i>
+                </button>
+                <button class="slider-control next-slide" id="featured-next">
+                    <i class="ri-arrow-right-s-line"></i>
+                </button>
+            </div>
+        </div>
+        
+        <div class="featured-grid" id="featured-wallpapers">
+            <!-- Featured wallpapers will be loaded dynamically -->
+            <div class="wallpaper-card-skeleton"></div>
+            <div class="wallpaper-card-skeleton"></div>
+            <div class="wallpaper-card-skeleton"></div>
+            <div class="wallpaper-card-skeleton"></div>
+        </div>
+    </div>
+</section>
+
+<!-- Trending Wallpapers Section -->
+<section class="trending-section" id="trending">
+    <div class="container">
+        <div class="section-header">
+            <h2 class="section-title">
+                Trending <span class="accent-text">Today</span>
+            </h2>
+            <a href="/category/all" class="section-link">
+                View All <i class="ri-arrow-right-line"></i>
+            </a>
+        </div>
+        
+        <div class="masonry-grid" id="trending-wallpapers">
+            <!-- Trending wallpapers will be loaded dynamically -->
+            <div class="masonry-item-skeleton"></div>
+            <div class="masonry-item-skeleton"></div>
+            <div class="masonry-item-skeleton"></div>
+            <div class="masonry-item-skeleton"></div>
+            <div class="masonry-item-skeleton"></div>
+            <div class="masonry-item-skeleton"></div>
+        </div>
+        
+        <div class="load-more-container">
+            <button class="btn btn-secondary" id="load-more-btn">
+                Load More <i class="ri-refresh-line"></i>
+            </button>
+        </div>
+    </div>
+</section>
+
+<!-- Newsletter Section -->
+<section class="newsletter-section">
+    <div class="container">
+        <div class="newsletter-content">
+            <h2 class="section-title">
+                Stay Updated with <span class="accent-text">New Releases</span>
+            </h2>
+            <p class="newsletter-description">
+                Subscribe to our newsletter to get notified about new wallpapers, features, and special offers.
+            </p>
+            
+            <form class="newsletter-form" id="newsletter-form">
+                <div class="form-group">
+                    <input type="email" id="newsletter-email" placeholder="Enter your email" required>
+                    <button type="submit" class="btn btn-primary" id="subscribe-btn">Subscribe</button>
+                </div>
+                <div class="form-message" id="newsletter-message"></div>
+            </form>
+        </div>
+        
+        <div class="ad-banner">
+            <div class="ad-container">
+                <span class="ad-label">Advertisement</span>
+                <!-- Ad content -->
+            </div>
+        </div>
+    </div>
+    <div class="newsletter-bg-shape"></div>
+</section>
+{% endblock %}
+
+{% block extra_scripts %}
+<script>
+    // Home page specific scripts
+    document.addEventListener('DOMContentLoaded', function() {
+        // Load categories
+        fetchCategories();
+        
+        // Load featured wallpapers
+        fetchFeaturedWallpapers();
+        
+        // Load trending wallpapers
+        fetchTrendingWallpapers();
+        
+        // Newsletter form submission
+        const newsletterForm = document.getElementById('newsletter-form');
+        newsletterForm.addEventListener('submit', function(e) {
+            e.preventDefault();
+            subscribeToNewsletter();
+        });
+    });
+</script>
+{% endblock %}
