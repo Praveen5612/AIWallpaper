@@ -1,13 +1,9 @@
 import os
 import datetime
-from app import db, User, Category, Tag, Wallpaper, WallpaperTag
+from app import app, db, User, Category, Tag, Wallpaper, WallpaperTag
 from werkzeug.security import generate_password_hash
 
-# Clear existing data
-db.drop_all()
-db.create_all()
-
-# Create categories
+# Define categories
 categories = [
     {
         'name': 'Abstract',
@@ -41,15 +37,7 @@ categories = [
     }
 ]
 
-category_objects = {}
-for category in categories:
-    c = Category(**category)
-    db.session.add(c)
-    category_objects[category['slug']] = c
-
-db.session.commit()
-
-# Create tags
+# Define tags
 tags = [
     {'name': '4K'},
     {'name': 'HD'},
@@ -71,15 +59,7 @@ tags = [
     {'name': 'AI-Generated'}
 ]
 
-tag_objects = {}
-for tag in tags:
-    t = Tag(**tag)
-    db.session.add(t)
-    tag_objects[tag['name']] = t
-
-db.session.commit()
-
-# Create wallpapers
+# Define wallpapers
 wallpapers = [
     {
         'title': 'Neon City Lights',
@@ -90,7 +70,7 @@ wallpapers = [
         'height': 2160,
         'file_size': '2.3 MB',
         'format': 'JPG',
-        'category_id': category_objects['futuristic'].id,
+        'category_slug': 'futuristic',
         'is_premium': False,
         'is_featured': False,
         'is_popular': True,
@@ -108,7 +88,7 @@ wallpapers = [
         'height': 2160,
         'file_size': '1.8 MB',
         'format': 'JPG',
-        'category_id': category_objects['abstract'].id,
+        'category_slug': 'abstract',
         'is_premium': False,
         'is_featured': True,
         'is_popular': True,
@@ -126,7 +106,7 @@ wallpapers = [
         'height': 2160,
         'file_size': '2.5 MB',
         'format': 'JPG',
-        'category_id': category_objects['space'].id,
+        'category_slug': 'space',
         'is_premium': False,
         'is_featured': True,
         'is_popular': False,
@@ -144,7 +124,7 @@ wallpapers = [
         'height': 2160,
         'file_size': '2.1 MB',
         'format': 'JPG',
-        'category_id': category_objects['nature'].id,
+        'category_slug': 'nature',
         'is_premium': False,
         'is_featured': False,
         'is_popular': False,
@@ -162,7 +142,7 @@ wallpapers = [
         'height': 2160,
         'file_size': '1.9 MB',
         'format': 'JPG',
-        'category_id': category_objects['futuristic'].id,
+        'category_slug': 'futuristic',
         'is_premium': False,
         'is_featured': True,
         'is_popular': True,
@@ -180,7 +160,7 @@ wallpapers = [
         'height': 2160,
         'file_size': '1.2 MB',
         'format': 'JPG',
-        'category_id': category_objects['minimalist'].id,
+        'category_slug': 'minimalist',
         'is_premium': False,
         'is_featured': True,
         'is_popular': False,
@@ -198,7 +178,7 @@ wallpapers = [
         'height': 2160,
         'file_size': '2.4 MB',
         'format': 'JPG',
-        'category_id': category_objects['space'].id,
+        'category_slug': 'space',
         'is_premium': False,
         'is_featured': False,
         'is_popular': True,
@@ -216,7 +196,7 @@ wallpapers = [
         'height': 1920,
         'file_size': '1.5 MB',
         'format': 'JPG',
-        'category_id': category_objects['abstract'].id,
+        'category_slug': 'abstract',
         'is_premium': False,
         'is_featured': False,
         'is_popular': True,
@@ -234,7 +214,7 @@ wallpapers = [
         'height': 2160,
         'file_size': '2.2 MB',
         'format': 'JPG',
-        'category_id': category_objects['nature'].id,
+        'category_slug': 'nature',
         'is_premium': False,
         'is_featured': False,
         'is_popular': False,
@@ -252,7 +232,7 @@ wallpapers = [
         'height': 2160,
         'file_size': '2.3 MB',
         'format': 'JPG',
-        'category_id': category_objects['sci-fi'].id,
+        'category_slug': 'sci-fi',
         'is_premium': True,
         'is_featured': False,
         'is_popular': True,
@@ -263,35 +243,60 @@ wallpapers = [
     }
 ]
 
-# Create wallpaper records and tag relationships
-for wallpaper_data in wallpapers:
-    tags_list = wallpaper_data.pop('tags')
-    
-    wallpaper = Wallpaper(**wallpaper_data)
-    db.session.add(wallpaper)
-    db.session.flush()
-    
-    for tag_name in tags_list:
-        wallpaper_tag = WallpaperTag(
-            wallpaper_id=wallpaper.id,
-            tag_id=tag_objects[tag_name].id
-        )
-        db.session.add(wallpaper_tag)
+with app.app_context():
+    # Clear existing data
+    db.drop_all()
+    db.create_all()
 
-# Update category counts
-for category in Category.query.all():
-    count = Wallpaper.query.filter_by(category_id=category.id).count()
-    category.count = count
+    # Create categories
+    category_objects = {}
+    for category in categories:
+        c = Category(**category)
+        db.session.add(c)
+        category_objects[category['slug']] = c
 
-# Create a test user
-admin_user = User(
-    username='admin',
-    email='admin@example.com',
-    password=generate_password_hash('password123')
-)
-db.session.add(admin_user)
+    db.session.commit()
 
-# Commit all changes
-db.session.commit()
+    # Create tags
+    tag_objects = {}
+    for tag in tags:
+        t = Tag(**tag)
+        db.session.add(t)
+        tag_objects[tag['name']] = t
+
+    db.session.commit()
+
+    # Create wallpapers and tag relationships
+    for wallpaper_data in wallpapers:
+        tags_list = wallpaper_data.pop('tags')
+        category_slug = wallpaper_data.pop('category_slug')
+        wallpaper_data['category_id'] = category_objects[category_slug].id
+        
+        wallpaper = Wallpaper(**wallpaper_data)
+        db.session.add(wallpaper)
+        db.session.flush()
+        
+        for tag_name in tags_list:
+            wallpaper_tag = WallpaperTag(
+                wallpaper_id=wallpaper.id,
+                tag_id=tag_objects[tag_name].id
+            )
+            db.session.add(wallpaper_tag)
+
+    # Update category counts
+    for category in Category.query.all():
+        count = Wallpaper.query.filter_by(category_id=category.id).count()
+        category.count = count
+
+    # Create a test user
+    admin_user = User(
+        username='admin',
+        email='admin@example.com',
+        password=generate_password_hash('password123')
+    )
+    db.session.add(admin_user)
+
+    # Commit all changes
+    db.session.commit()
 
 print("Database seeded successfully.")

@@ -125,8 +125,7 @@ def serialize_tag(tag):
     }
 
 # Create database tables
-@app.before_first_request
-def create_tables():
+with app.app_context():
     db.create_all()
 
 # Template context processor
